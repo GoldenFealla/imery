@@ -1,0 +1,29 @@
+<header class="flex items-center justify-between h-14 px-4 border-b border-border bg-background sticky top-0 z-50">
+  <div class="flex items-center justify-between h-14 px-4 max-w-7xl mx-auto w-full">
+    <div class="flex items-center gap-4">
+      <a routerLink="/" class="flex items-center gap-2 no-underline">
+        <!-- <img src="assets/logo.png" alt="Logo" class="w-7 h-7 object-contain" /> -->
+        <span class="text-xl font-semibold text-foreground">Image Processing</span>
+      </a>
+      <nav class="flex items-center gap-0.5">
+        <a routerLink="/upload" routerLinkActive="active" hlmBtn variant="default" size="sm">
+          <ng-icon hlm size="sm" name="lucidePlus" /> Upload
+        </a>
+        <a routerLink="/galleries" routerLinkActive="active" hlmBtn variant="ghost" size="sm">Galleries</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-1">
+      <button hlmBtn variant="ghost" size="icon" class="size-8" title="Toggle Theme" (click)="toggleTheme()">
+        <ng-icon hlm size="sm" [name]="isDark() ? 'lucideMoon' : 'lucideSun'" />
+      </button>
+      <hlm-separator orientation="vertical" class="h-5 mx-1" />
+      <a routerLink="/profile" hlmBtn variant="ghost" size="sm" class="gap-2">
+        <hlm-avatar class="size-7">
+          <span hlmAvatarFallback>JD</span>
+        </hlm-avatar>
+        <span>johndoe</span>
+      </a>
+    </div>
+  </div>
+</header>
