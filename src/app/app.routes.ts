@@ -1,12 +1,22 @@
 import { Routes } from '@angular/router';
 
-import { Home } from '@pages/home/home';
-import { Upload } from '@pages/upload/upload';
-import { Galleries } from '@pages/galleries/galleries';
+import { Main } from '@pages/main/main';
+import { Login } from '@pages/login/login';
+
+// Main children
+import { Upload } from '@pages/main/pages/upload/upload';
+import { Galleries } from '@pages/main/pages/galleries/galleries';
+import { NotFound } from '@pages/not-found/not-found';
 
 export const routes: Routes = [
-  { path: '', component: Home },
-  { path: 'home', redirectTo: '' },
-  { path: 'upload', component: Upload },
-  { path: 'galleries', component: Galleries },
+  {
+    path: '',
+    component: Main,
+    children: [
+      { path: 'upload', component: Upload },
+      { path: 'galleries', component: Galleries },
+    ],
+  },
+  { path: 'login', component: Login },
+  { path: '**', component: NotFound },
 ];

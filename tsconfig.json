@@ -16,6 +16,7 @@
       "@services/*": ["./src/services/*"],
       "@components/*": ["./src/components/*"],
       "@pages/*": ["./src/app/pages/*"],
+      "@models/*": ["./src/models/*"],
       "@environments/*": ["./src/environments/*"],
       "@spartan-ng/helm/empty": ["./libs/ui/empty/src/index.ts"],
       "@spartan-ng/helm/utils": ["./libs/ui/utils/src/index.ts"],
