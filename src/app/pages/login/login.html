@@ -1,1 +1,52 @@
-<p>login works!</p>,
+<div class="flex items-center justify-center w-full h-full min-h-screen bg-background text-foreground">
+  <div class="min-w-72 max-w-96 w-full p-2">
+    <hlm-card>
+      <hlm-card-header>
+        <h3 hlmCardTitle>Login</h3>
+        <p hlmCardDescription>Enter your credentials to continue</p>
+      </hlm-card-header>
+
+      <div hlmCardContent>
+        <form id="login-form" [formGroup]="form" (ngSubmit)="submit()">
+          <div class="flex flex-col gap-4">
+
+            <!-- Email -->
+            <div hlmField>
+              <label hlmFieldLabel for="email">Email</label>
+              <input hlmInput id="email" type="email" 
+                     placeholder="you@example.com"
+                     formControlName="email" />
+              @if (form.controls.email.invalid && form.controls.email.touched) {
+                 <hlm-field-error>Valid email is required</hlm-field-error>
+              }
+            </div>
+
+            <!-- Password -->
+            <div hlmField>
+              <label hlmFieldLabel for="password">Password</label>
+              <input hlmInput id="password" type="password"
+                     placeholder="••••••••••••"
+                     formControlName="password" />
+              @if (form.controls.password.invalid && form.controls.password.touched) {
+                <hlm-field-error>Password must be at least 8 characters</hlm-field-error>
+              }
+            </div>
+
+            <!-- Error -->
+            @if (error) {
+              <p class="text-sm text-destructive">{{ error }}</p>
+            }
+
+          </div>
+        </form>
+      </div>
+
+      <hlm-card-footer>
+        <button hlmBtn type="submit" form="login-form" class="w-full" [disabled]="isLoading()">
+          {{ isLoading() ? 'Logging in...' : 'Login' }}
+        </button>
+      </hlm-card-footer>
+
+    </hlm-card>
+  </div>
+</div>

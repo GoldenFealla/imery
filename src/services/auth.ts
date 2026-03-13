@@ -34,7 +34,11 @@ export class AuthService {
     );
   }
 
-  public Login(login: LoginForm) {}
+  public Login(form: LoginForm) {
+    return this.apiService
+      .post<{ access_token: string }>(Endpoints.Login, form)
+      .pipe(tap((res) => (this.accessToken = res.body?.access_token ?? null)));
+  }
 
   public Logout() {
     this.accessToken = null;
