@@ -15,6 +15,6 @@ export class Main {
   private imageService = inject(ImageService);
 
   ngOnInit() {
-    this.imageService.GetGalleries().subscribe();
+    // this.imageService.GetGalleries().subscribe();
   }
 }

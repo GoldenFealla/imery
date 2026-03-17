@@ -3,8 +3,12 @@ import { ApiService } from '@services/api';
 
 import { environment } from '@environments/environment.development';
 
+// Models
+import { Image } from '@models/image';
+
 const Endpoints = {
-  Galleries: `${environment.apiUrl}/images/test`,
+  Upload: `${environment.apiUrl}/images/`,
+  Galleries: `${environment.apiUrl}/images/`,
 } as const;
 
 @Injectable({
@@ -15,5 +19,11 @@ export class ImageService {
 
   public GetGalleries() {
     return this.apiService.get(Endpoints.Galleries);
+  }
+
+  public Upload(file: File) {
+    const form = new FormData();
+    form.append('image', file, file.name);
+    return this.apiService.postForm<Image>(Endpoints.Upload, form);
   }
 }

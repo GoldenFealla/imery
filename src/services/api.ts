@@ -34,4 +34,8 @@ export class ApiService {
   post<T>(url: string, body: unknown = {}) {
     return this.client.post<T>(url, body, this.options);
   }
+
+  postForm<T>(url: string, body: FormData) {
+    return this.client.post<T>(url, body, { withCredentials: true, observe: 'response' });
+  }
 }

@@ -9,7 +9,7 @@ import { Galleries } from '@pages/main/pages/galleries/galleries';
 import { NotFound } from '@pages/not-found/not-found';
 
 // Guards
-import { guestGuard } from './guards/guest-guard';
+import { guestGuard } from '@guards/guest-guard';
 
 export const routes: Routes = [
   {
