@@ -1,17 +1,10 @@
 import { inject } from '@angular/core';
-import type {
-  HttpErrorResponse,
-  HttpHandlerFn,
-  HttpInterceptorFn,
-  HttpRequest,
-} from '@angular/common/http';
+import type { HttpErrorResponse, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { AuthService } from '@services/auth';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, switchMap, throwError } from 'rxjs';
+import { catchError, EMPTY, switchMap, tap, throwError } from 'rxjs';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  console.log('auth interceptor');
-
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -20,9 +13,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       return next(addToken(req, authService.Token()));
     }
 
-    authService.Logout();
-    router.navigate(['/login']);
-    return EMPTY;
+    return authService.Logout().pipe(
+      tap(() => router.navigate(['/login'])),
+      switchMap(() => EMPTY),
+    );
   };
 
   const handleUnauthorized = (error: HttpErrorResponse) => {

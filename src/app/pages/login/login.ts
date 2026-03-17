@@ -44,6 +44,14 @@ export class Login {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  ngOnInit() {
+    let token = this.authService.Token();
+    console.log(token);
+    if (token) {
+      this.router.navigate(['/']);
+    }
+  }
+
   submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();

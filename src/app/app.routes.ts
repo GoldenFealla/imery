@@ -8,6 +8,9 @@ import { Upload } from '@pages/main/pages/upload/upload';
 import { Galleries } from '@pages/main/pages/galleries/galleries';
 import { NotFound } from '@pages/not-found/not-found';
 
+// Guards
+import { guestGuard } from './guards/guest-guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -17,6 +20,6 @@ export const routes: Routes = [
       { path: 'galleries', component: Galleries },
     ],
   },
-  { path: 'login', component: Login },
+  { path: 'login', component: Login, canActivate: [guestGuard] },
   { path: '**', component: NotFound },
 ];
