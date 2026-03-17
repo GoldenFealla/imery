@@ -1,0 +1,4 @@
+<div class="flex h-screen overflow-hidden bg-background">
+  <edit-sidebar [id]="id" [opts]="opts()" (optsChange)="update($event)" (save)="save()" />
+  <edit-preview [url]="previewUrl() ?? originalUrl()" [isPreviewing]="isPreviewing()" />
+</div>

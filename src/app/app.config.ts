@@ -1,6 +1,12 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 import { routes } from './app.routes';
 
@@ -8,10 +14,17 @@ import { routes } from './app.routes';
 import { authInterceptor } from '../interceptors/auth-interceptor';
 import { errorInterceptor } from '../interceptors/error-interceptor';
 
+// Services
+import { AuthService } from '@services/auth';
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAppInitializer(() => {
+      const authService = inject(AuthService);
+      return firstValueFrom(authService.Refresh());
+    }),
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
   ],
 };

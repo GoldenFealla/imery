@@ -1,0 +1,35 @@
+<div class="rounded-lg border border-border bg-card overflow-hidden group cursor-pointer">
+  <div class="relative aspect-square overflow-hidden bg-muted">
+    <img
+      [src]="image().url"
+      [alt]="image().id"
+      loading="lazy"
+      class="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
+    />
+    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2">
+      <button
+        hlmBtn
+        variant="ghost"
+        size="icon"
+        class="text-white hover:text-white hover:bg-white/20"
+        (click)="edit.emit(image().id)"
+      >
+        <ng-icon name="lucidePencil" size="18" />
+      </button>
+      <button
+        hlmBtn
+        variant="ghost"
+        size="icon"
+        class="text-red-400 hover:text-red-400 hover:bg-red-400/20"
+        (click)="delete.emit(image().id)"
+      >
+        <ng-icon name="lucideTrash2" size="18" />
+      </button>
+    </div>
+  </div>
+
+  <div class="p-3 flex items-center justify-between gap-2">
+    <span class="text-xs text-muted-foreground truncate">{{ image().id }}</span>
+    <span class="text-xs text-muted-foreground truncate">{{ image().version }}</span>
+  </div>
+</div>

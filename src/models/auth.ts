@@ -1,7 +1,7 @@
 export enum Auth {
-  Pending,
-  Authenticated,
-  Unauthenticated,
+  Pending = 'pending',
+  Authenticated = 'authenticated',
+  Unauthenticated = 'unauthenticated',
 }
 
 export type AuthState = Auth.Pending | Auth.Authenticated | Auth.Unauthenticated;

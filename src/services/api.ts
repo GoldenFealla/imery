@@ -38,4 +38,15 @@ export class ApiService {
   postForm<T>(url: string, body: FormData) {
     return this.client.post<T>(url, body, { withCredentials: true, observe: 'response' });
   }
+
+  postBlob(url: string, body: unknown = {}) {
+    return this.client.post(url, body, {
+      ...this.options,
+      responseType: 'blob',
+    });
+  }
+
+  put<T>(url: string, body: unknown = {}) {
+    return this.client.put<T>(url, body, this.options);
+  }
 }
