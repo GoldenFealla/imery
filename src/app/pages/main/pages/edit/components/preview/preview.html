@@ -5,9 +5,8 @@
       Previewing...
     </div>
   }
-  @if (url(); as src) {
-    <img [src]="src" class="max-h-full max-w-full object-contain rounded-lg" />
-  } @else {
-    <p class="text-muted-foreground text-sm">Loading...</p>
-  }
+
+  <div class="h-full w-full overflow-hidden">
+    <img #imageElement [src]="url()" class="max-h-full max-w-full object-contain rounded-lg" />
+  </div>
 </div>
