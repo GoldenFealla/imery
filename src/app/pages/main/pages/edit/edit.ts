@@ -65,38 +65,6 @@ export class Edit implements OnDestroy {
     this.transformSubject.next(this.opts());
   }
 
-  toggleFilter(filter: Filter) {
-    const current = this.opts().filters ?? [];
-    const next = current.includes(filter)
-      ? current.filter((f) => f !== filter)
-      : [...current, filter];
-    this.update({ filters: next });
-  }
-
-  toggleResize(enabled: boolean) {
-    this.update({ resize: enabled ? { width: 800, height: 600, keep_aspect: false } : undefined });
-  }
-
-  toggleCrop(enabled: boolean) {
-    this.update({ crop: enabled ? { x: 0, y: 0, width: 800, height: 600 } : undefined });
-  }
-
-  toggleWatermark(enabled: boolean) {
-    this.update({
-      watermark: enabled ? { text: '', opacity: 0.5, position: 'bottom-right' } : undefined,
-    });
-  }
-
-  toggleCompress(enabled: boolean) {
-    this.update({ compress: enabled ? { quality: 80 } : undefined });
-  }
-
-  updateCrop(field: string, value: number) {
-    this.update({
-      crop: { ...this.opts().crop!, [field]: value },
-    });
-  }
-
   save() {
     this.isSaving.set(true);
     this.imageService.Save(this.id).subscribe({

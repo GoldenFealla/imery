@@ -73,6 +73,9 @@ export class Login {
           this.isLoading.set(false);
         }),
       )
-      .subscribe(() => this.router.navigate(['/']));
+      .subscribe(() => {
+        console.log('logged in');
+        this.router.navigate(['/']);
+      });
   }
 }

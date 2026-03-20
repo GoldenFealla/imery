@@ -45,14 +45,7 @@ import { lucideLink, lucideUnlink } from '@ng-icons/lucide';
               />
             </div>
           </div>
-          <button
-            hlmBtn
-            variant="ghost"
-            size="icon"
-            class="mt-4 shrink-0"
-            (click)="toggleAspect()"
-            [title]="resize()!.keep_aspect ? 'Unlock aspect ratio' : 'Lock aspect ratio'"
-          >
+          <button hlmBtn variant="ghost" size="icon" class="mt-4 shrink-0" (click)="toggleAspect()">
             <ng-icon
               [name]="resize()!.keep_aspect ? 'lucideLink' : 'lucideUnlink'"
               class="size-4"
