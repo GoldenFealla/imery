@@ -18,6 +18,7 @@ export type WatermarkPosition =
 export type ResizeOptions = {
   width: number;
   height: number;
+  keep_aspect: boolean;
 };
 
 export type CropOptions = {

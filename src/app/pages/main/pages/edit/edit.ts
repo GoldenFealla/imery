@@ -74,7 +74,7 @@ export class Edit implements OnDestroy {
   }
 
   toggleResize(enabled: boolean) {
-    this.update({ resize: enabled ? { width: 800, height: 600 } : undefined });
+    this.update({ resize: enabled ? { width: 800, height: 600, keep_aspect: false } : undefined });
   }
 
   toggleCrop(enabled: boolean) {
