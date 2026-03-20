@@ -3,18 +3,17 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 // Models
 import { ResizeOptions } from '@models/image';
 
+// Spartan
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+
 @Component({
   selector: 'sidebar-resize',
-  imports: [],
+  imports: [HlmCheckboxImports],
   template: `
     <section>
       <div class="flex items-center justify-between mb-2">
         <p class="text-xs font-medium text-muted-foreground">Resize</p>
-        <input
-          type="checkbox"
-          [checked]="!!resize()"
-          (change)="toggle($any($event.target).checked)"
-        />
+        <hlm-checkbox id="terms-2" [checked]="!!resize()" (checkedChange)="toggle($event)" />
       </div>
       @if (resize()) {
         <div class="grid grid-cols-2 gap-2">

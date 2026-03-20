@@ -20,8 +20,9 @@ export const routes: Routes = [
     component: Main,
     canActivate: [authGuard],
     children: [
+      { path: '', component: Galleries },
       { path: 'upload', component: Upload },
-      { path: 'galleries', component: Galleries },
+      { path: 'galleries', redirectTo: '' },
       { path: 'edit/:id', component: Edit },
       { path: 'edit', redirectTo: '/galleries' },
     ],
