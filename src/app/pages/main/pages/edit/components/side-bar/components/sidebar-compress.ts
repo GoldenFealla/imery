@@ -2,30 +2,26 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 
 // Models
 import { CompressOptions } from '@models/image';
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+import { HlmSliderImports } from '@spartan-ng/helm/slider';
 
 @Component({
   selector: 'sidebar-compress',
-  imports: [],
+  imports: [HlmSliderImports, HlmCheckboxImports],
   template: `
     <section>
       <div class="flex items-center justify-between mb-2">
         <p class="text-xs font-medium text-muted-foreground">Compress</p>
-        <input
-          type="checkbox"
-          [checked]="!!compress()"
-          (change)="toggle($any($event.target).checked)"
-        />
+        <hlm-checkbox [checked]="!!compress()" (checkedChange)="toggle($event)" />
       </div>
       @if (compress()) {
         <div class="flex items-center gap-3">
-          <input
-            type="range"
+          <hlm-slider
             min="1"
             max="100"
             step="1"
-            [value]="compress()!.quality"
-            (input)="compressChange.emit({ quality: +$any($event.target).value })"
-            class="flex-1"
+            [value]="[compress()!.quality]"
+            (valueChange)="compressChange.emit({ quality: $event[0] })"
           />
           <span class="text-sm text-muted-foreground w-10 text-right">
             {{ compress()!.quality }}%
