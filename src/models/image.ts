@@ -8,13 +8,6 @@ export type Image = {
 export type Format = 'jpeg' | 'png' | 'webp';
 export type Filter = 'grayscale' | 'sepia';
 
-export type WatermarkPosition =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'center';
-
 export type ResizeOptions = {
   width: number;
   height: number;
@@ -30,8 +23,10 @@ export type CropOptions = {
 
 export type WatermarkOptions = {
   text: string;
+  size: number;
   opacity: number;
-  position: WatermarkPosition;
+  x: number;
+  y: number;
 };
 
 export type CompressOptions = {

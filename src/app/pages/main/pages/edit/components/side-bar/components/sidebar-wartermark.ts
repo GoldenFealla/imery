@@ -3,53 +3,81 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 // Models
 import { WatermarkOptions } from '@models/image';
 
+// Spartan
+import { HlmLabelImports } from '@spartan-ng/helm/label';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmSliderImports } from '@spartan-ng/helm/slider';
+import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+
 @Component({
   selector: 'sidebar-watermark',
-  imports: [],
+  imports: [HlmLabelImports, HlmInputImports, HlmSliderImports, HlmCheckboxImports],
   template: `
-    <section>
-      <div class="flex items-center justify-between mb-2">
-        <p class="text-xs font-medium text-muted-foreground">Watermark</p>
-        <input
-          type="checkbox"
-          [checked]="!!watermark()"
-          (change)="toggle($any($event.target).checked)"
-        />
+    <section class="space-y-3">
+      <div class="flex items-center justify-between">
+        <label hlmLabel class="text-xs font-medium">Watermark</label>
+        <hlm-checkbox [checked]="!!watermark()" (checkedChange)="toggle($event)" />
       </div>
-      @if (watermark()) {
-        <div class="space-y-2">
-          <input
-            type="text"
-            hlmInput
-            placeholder="Watermark text"
-            [value]="watermark()!.text"
-            (input)="patch('text', $any($event.target).value)"
-            class="w-full"
-          />
-          <div class="flex items-center gap-3">
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              [value]="watermark()!.opacity"
-              (input)="patch('opacity', +$any($event.target).value)"
-              class="flex-1"
-            />
-            <span class="text-sm text-muted-foreground w-10 text-right">
-              {{ (watermark()!.opacity * 100).toFixed(0) }}%
-            </span>
+
+      @if (watermark(); as w) {
+        <input
+          hlmInput
+          type="text"
+          placeholder="Watermark text"
+          [value]="w.text"
+          (input)="patch('text', $any($event.target).value)"
+          class="w-full"
+        />
+
+        <div class="space-y-1">
+          <div class="flex items-center justify-between">
+            <label hlmLabel class="text-xs">Size</label>
+            <span class="text-xs text-muted-foreground">{{ w.size }}px</span>
           </div>
-          <select
-            hlmInput
-            class="w-full"
-            [value]="watermark()!.position"
-            (change)="patch('position', $any($event.target).value)"
-          >
-            @for (pos of positions; track pos) {
-              <option [value]="pos">{{ pos }}</option>
-            }
-          </select>
+          <hlm-slider
+            min="10"
+            max="120"
+            step="1"
+            [value]="[w.size]"
+            (valueChange)="patch('size', $event[0])"
+          />
+        </div>
+
+        <div class="space-y-1">
+          <div class="flex items-center justify-between">
+            <label hlmLabel class="text-xs">Opacity</label>
+            <span class="text-xs text-muted-foreground"> {{ (w.opacity * 100).toFixed(0) }}% </span>
+          </div>
+          <hlm-slider
+            min="0"
+            max="1"
+            step="0.05"
+            [value]="[w.opacity]"
+            (valueChange)="patch('size', $event[0])"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div class="space-y-1">
+            <label hlmLabel class="text-xs">X</label>
+            <input
+              hlmInput
+              type="number"
+              [value]="w.x"
+              (input)="patch('x', +$any($event.target).value)"
+              class="w-full"
+            />
+          </div>
+          <div class="space-y-1">
+            <label hlmLabel class="text-xs">Y</label>
+            <input
+              hlmInput
+              type="number"
+              [value]="w.y"
+              (input)="patch('y', +$any($event.target).value)"
+              class="w-full"
+            />
+          </div>
         </div>
       }
     </section>
@@ -62,18 +90,16 @@ import { WatermarkOptions } from '@models/image';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarWatermark {
-  positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'center'];
-
   watermark = input<WatermarkOptions | undefined>(undefined);
   watermarkChange = output<WatermarkOptions | undefined>();
 
   toggle(enabled: boolean) {
     this.watermarkChange.emit(
-      enabled ? { text: '', opacity: 0.5, position: 'bottom-right' } : undefined,
+      enabled ? { text: '', size: 48, opacity: 0.5, x: 20, y: 20 } : undefined,
     );
   }
 
-  patch(field: keyof WatermarkOptions, value: string | number) {
+  patch<K extends keyof WatermarkOptions>(field: K, value: WatermarkOptions[K]) {
     this.watermarkChange.emit({ ...this.watermark()!, [field]: value });
   }
 }
