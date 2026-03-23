@@ -61,6 +61,11 @@ export class Edit implements OnDestroy {
       error: () => this.isPreviewing.set(false),
     });
 
+  handleOnTransform(opts: TransformOptions) {
+    console.log(opts);
+    this.transformSubject.next(opts);
+  }
+
   save() {
     this.isSaving.set(true);
     this.imageService.Save(this.id).subscribe({

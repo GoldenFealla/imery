@@ -41,21 +41,17 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 })
 export class SideBar {
   id = input.required<string>();
+  back = output<void>();
 
   opts = signal<TransformOptions>({});
-  constructor() {
-    effect(() => {
-      console.log(this.opts());
-    });
-  }
-
-  isSaving = input<boolean>(false);
-  url = input<string | null>(null);
+  optsChange = output<TransformOptions>();
+  // url = input<string | null>(null);
 
   save = output<void>();
-  back = output<void>();
+  isSaving = input<boolean>(false);
 
   handleOnChange<K extends keyof TransformOptions>(key: K, value: TransformOptions[K]) {
     this.opts.update((v) => ({ ...v, [key]: value }));
+    this.optsChange.emit(this.opts());
   }
 }

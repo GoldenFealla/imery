@@ -24,7 +24,6 @@
     <sidebar-compress (compress)="handleOnChange('compress', $event)" /> 
     <sidebar-watermark (watermark)="handleOnChange('watermark', $event)" />
   </div>
-
   <div class="p-4 border-t border-border" >
     <button hlmBtn class="w-full" (click)="save.emit()" [disabled]="isSaving()">
       @if (isSaving()) {

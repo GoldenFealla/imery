@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 
 // Spartan
 import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
@@ -28,7 +28,10 @@ export class SidebarToggle {
   category = input.required<string>();
   shown = signal<boolean>(false);
 
+  isActive = output<boolean>();
+
   toggleVisible(enabled: boolean) {
     this.shown.set(enabled);
+    this.isActive.emit(this.shown());
   }
 }

@@ -62,8 +62,14 @@ export class SidebarWatermark {
 
   watermark = output<WatermarkOptions | undefined>();
 
+  isActive = signal<boolean>(false);
+
   constructor() {
     effect(() => {
+      if (!this.isActive()) {
+        this.watermark.emit(undefined);
+        return;
+      }
       this.watermark.emit({
         text: this.text(),
         size: this.size(),

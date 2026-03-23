@@ -24,7 +24,7 @@ const DefaultResizeKeepAspect = true;
   imports: [NgIcon, HlmButtonImports, SidebarToggle],
   providers: [provideIcons({ lucideLink, lucideUnlink })],
   template: `
-    <sidebar-toggle category="Resize">
+    <sidebar-toggle category="Resize" (isActive)="isActive.set($event)">
       <div class="flex items-center gap-2">
         <div class="grid grid-cols-2 gap-2 flex-1">
           <div>
@@ -54,10 +54,16 @@ export class SidebarResize {
   height = signal<number>(DefaultResizeHeight);
   keep_aspect = signal<boolean>(DefaultResizeKeepAspect);
 
-  resize = output<ResizeOptions>();
+  resize = output<ResizeOptions | undefined>();
+
+  isActive = signal<boolean>(false);
 
   constructor() {
     effect(() => {
+      if (!this.isActive()) {
+        this.resize.emit(undefined);
+        return;
+      }
       this.resize.emit({ height: this.height(), width: this.width(), keep_aspect: this.keep_aspect() });
     });
   }
