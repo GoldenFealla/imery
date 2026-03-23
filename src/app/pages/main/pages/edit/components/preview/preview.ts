@@ -13,6 +13,7 @@ import { lucideLoader } from '@ng-icons/lucide';
   templateUrl: './preview.html',
   providers: [provideIcons({ lucideLoader })],
   styleUrl: './preview.css',
+  host: { class: 'flex-1' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Preview {

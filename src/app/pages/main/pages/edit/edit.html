@@ -1,4 +1,4 @@
 <div class="flex overflow-hidden bg-background max-h-[calc(100vh-3.5rem)] ">
-  <edit-sidebar [id]="id" [isSaving]="isSaving()" (save)="save()" (optsChange)="handleOnTransform($event)" />
+  <edit-sidebar [id]="id" [isSaving]="isSaving()" (save)="save()" (back)="goBack()" (optsChange)="handleOnTransform($event)" />
   <edit-preview [url]="previewUrl() ?? originalUrl()" [isPreviewing]="isPreviewing()" />
 </div>
