@@ -7,15 +7,22 @@
   </div>
 
   <div class="flex-1 overflow-y-auto p-4 space-y-6">
-    <sidebar-crop [crop]="opts().crop" (cropChange)="patch({ crop: $event })" />
-    <sidebar-resize [resize]="opts().resize" (resizeChange)="patch({ resize: $event })" />
-    <sidebar-rotate [angle]="opts().rotate?.angle ?? 0" (angleChange)="patch({ rotate: { angle: $event } })" />
-    <sidebar-flip-mirror [flip]="opts().flip ?? false" [mirror]="opts().mirror ?? false" (change)="patch($event)" />
-    
-    <sidebar-filter [filters]="opts().filters ?? []" (filtersChange)="patch({ filters: $event })" />
-    <sidebar-watermark [watermark]="opts().watermark" (watermarkChange)="patch({ watermark: $event })" />
-    <sidebar-format [format]="opts().format" (formatChange)="patch({ format: $event })" />
-    <sidebar-compress [compress]="opts().compress" (compressChange)="patch({ compress: $event })" />
+    <!-- <sidebar-crop
+      [url]="url()"
+      [crop]="crop()"
+      [imageWidth]="imageWidth()"
+      [imageHeight]="imageHeight()"
+      (cropChange)="onCropCommit($event)"
+      (cropClear)="crop.set(undefined)"
+    /> -->
+    <sidebar-resize (resize)="handleOnChange('resize', $event)" />
+    <sidebar-rotate (rotate)="handleOnChange('rotate', $event)" />
+    <sidebar-flip-mirror (flip)="handleOnChange('flip', $event)" (mirror)="handleOnChange('mirror', $event)" />
+
+    <sidebar-filter [filters]="opts().filters" />
+    <!-- <sidebar-watermark [watermark]="opts().watermark" />
+    <sidebar-format [format]="opts().format" />
+    <sidebar-compress [compress]="opts().compress" /> -->
   </div>
 
   <div class="p-4 border-t border-border">

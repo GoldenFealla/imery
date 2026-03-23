@@ -14,7 +14,7 @@ import { Preview } from './components/preview/preview';
 import { ImageService } from '@services/image';
 
 // Models
-import { TransformOptions, Filter } from '@models/image';
+import { TransformOptions } from '@models/image';
 
 @Component({
   selector: 'app-edit',
@@ -33,6 +33,7 @@ export class Edit implements OnDestroy {
 
   // Transform state
   opts = signal<TransformOptions>({});
+
   previewUrl = signal<string | null>(null);
   originalUrl = computed(() => this.image()?.url ?? null);
   isPreviewing = signal(false);
@@ -59,11 +60,6 @@ export class Edit implements OnDestroy {
       },
       error: () => this.isPreviewing.set(false),
     });
-
-  update(patch: Partial<TransformOptions>) {
-    this.opts.update((o) => ({ ...o, ...patch }));
-    this.transformSubject.next(this.opts());
-  }
 
   save() {
     this.isSaving.set(true);

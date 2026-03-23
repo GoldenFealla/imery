@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, output, effect } from '@angular/core';
+import { RotateOptions } from '@models/image';
 
 // Icons
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -15,12 +16,7 @@ import { HlmSliderImports } from '@spartan-ng/helm/slider';
     <section>
       <p class="text-xs font-medium text-muted-foreground mb-2">Rotate</p>
       <div class="flex items-center gap-3">
-        <hlm-slider
-          min="-180"
-          max="180"
-          [value]="[angle()]"
-          (valueChange)="angleChange.emit($event[0])"
-        />
+        <hlm-slider min="-180" max="180" [value]="angle()" (valueChange)="angle.set($event)" />
         <span class="text-sm text-muted-foreground w-10 text-right"> {{ angle() }}° </span>
         <button hlmBtn size="icon" variant="ghost" (click)="reset()">
           <ng-icon name="lucideRefreshCcw"></ng-icon>
@@ -36,11 +32,16 @@ import { HlmSliderImports } from '@spartan-ng/helm/slider';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarRotate {
-  angle = input<number>(0);
+  angle = signal<number[]>([0]);
+  rotate = output<RotateOptions>();
 
-  angleChange = output<number>();
+  constructor() {
+    effect(() => {
+      this.rotate.emit({ angle: this.angle()[0] });
+    });
+  }
 
   reset() {
-    this.angleChange.emit(0);
+    this.angle.set([0]);
   }
 }

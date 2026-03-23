@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, model, output, signal } from '@angular/core';
 
 // Models
 import { TransformOptions } from '@models/image';
@@ -18,20 +18,10 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
     <section>
       <p class="text-xs font-medium text-muted-foreground mb-2">Flip / Mirror</p>
       <div class="flex gap-2">
-        <button
-          hlmBtn
-          [variant]="flip() ? 'default' : 'outline'"
-          size="sm"
-          (click)="change.emit({ flip: !flip() })"
-        >
+        <button hlmBtn [variant]="flipState() ? 'default' : 'outline'" size="sm" (click)="handleOnFlip()">
           <ng-icon name="lucideFlipVertical" size="14" class="mr-1" /> Flip
         </button>
-        <button
-          hlmBtn
-          [variant]="mirror() ? 'default' : 'outline'"
-          size="sm"
-          (click)="change.emit({ mirror: !mirror() })"
-        >
+        <button hlmBtn [variant]="mirrorState() ? 'default' : 'outline'" size="sm" (click)="handleOnMirror()">
           <ng-icon name="lucideFlipHorizontal" size="14" class="mr-1" /> Mirror
         </button>
       </div>
@@ -45,8 +35,27 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarFlipMirror {
-  flip = input<boolean>(false);
-  mirror = input<boolean>(false);
+  flipState = signal<boolean>(false);
+  mirrorState = signal<boolean>(false);
 
-  change = output<Partial<TransformOptions>>();
+  flip = output<boolean>();
+  mirror = output<boolean>();
+
+  constructor() {
+    effect(() => {
+      this.flip.emit(this.flipState());
+    });
+
+    effect(() => {
+      this.mirror.emit(this.mirrorState());
+    });
+  }
+
+  handleOnFlip() {
+    this.flipState.set(!this.flipState());
+  }
+
+  handleOnMirror() {
+    this.mirrorState.set(!this.mirrorState());
+  }
 }

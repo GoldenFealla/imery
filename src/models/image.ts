@@ -48,3 +48,5 @@ export type TransformOptions = {
   format?: Format;
   filters?: Filter[];
 };
+
+export type TransformOptionsKey = keyof TransformOptions;

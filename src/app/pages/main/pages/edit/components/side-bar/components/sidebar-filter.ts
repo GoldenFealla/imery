@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
 import { Filter } from '@models/image';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 
@@ -12,7 +12,7 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
         @for (filter of allFilters; track filter) {
           <button
             hlmBtn
-            [variant]="filters().includes(filter) ? 'default' : 'outline'"
+            [variant]="filters()?.includes(filter) ? 'default' : 'outline'"
             size="sm"
             (click)="toggle(filter)"
           >
@@ -31,13 +31,13 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 })
 export class SidebarFilter {
   allFilters: Filter[] = ['grayscale', 'sepia'];
-  filters = input<Filter[]>([]);
-  filtersChange = output<Filter[]>();
+  filters = model<Filter[]>();
 
   toggle(filter: Filter) {
-    const next = this.filters().includes(filter)
-      ? this.filters().filter((f) => f !== filter)
-      : [...this.filters(), filter];
-    this.filtersChange.emit(next);
+    let fils = this.filters();
+    if (fils) {
+      const next = fils.includes(filter) ? fils.filter((f) => f !== filter) : [...fils, filter];
+      this.filters.set(next);
+    }
   }
 }
