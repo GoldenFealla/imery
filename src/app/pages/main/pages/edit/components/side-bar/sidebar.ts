@@ -16,11 +16,13 @@ import { SidebarWatermark } from './components/sidebar-wartermark';
 
 // Icons
 import { lucideArrowLeft, lucideLoader, lucideSave } from '@ng-icons/lucide';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
 
 @Component({
   selector: 'edit-sidebar',
   imports: [
     NgIcon,
+    HlmButtonImports,
 
     // SidebarCrop,
     SidebarResize,

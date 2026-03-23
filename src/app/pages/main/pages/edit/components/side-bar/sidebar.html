@@ -28,9 +28,9 @@
   <div class="p-4 border-t border-border" >
     <button hlmBtn class="w-full" (click)="save.emit()" [disabled]="isSaving()">
       @if (isSaving()) {
-        <ng-icon name="lucideLoader" size="16" class="mr-2 animate-spin" />
+        <ng-icon name="lucideLoader" size="16" class="animate-spin" />
       } @else {
-        <ng-icon name="lucideSave" size="16" class="mr-2" />
+        <ng-icon name="lucideSave" size="16" />
       }
       Save
     </button>
