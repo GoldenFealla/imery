@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, output, signal } from '@angular/core';
 
 // Models
 import { Format } from '@models/image';
@@ -7,12 +7,15 @@ import { ToggleValue } from '@spartan-ng/brain/toggle-group';
 // Spartan
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 
+// Components
+import { SidebarToggle } from './sidebar-toggle';
+import { SidebarCompress } from './sidebar-compress';
+
 @Component({
   selector: 'sidebar-format',
-  imports: [HlmToggleGroupImports],
+  imports: [HlmToggleGroupImports, SidebarToggle],
   template: `
-    <section>
-      <p class="text-xs font-medium text-muted-foreground mb-2">Format</p>
+    <sidebar-toggle category="Format" [visible]="true" (isActive)="isActive.set($event)">
       <div class="flex gap-2">
         <hlm-toggle-group
           type="single"
@@ -30,7 +33,7 @@ import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
           }
         </hlm-toggle-group>
       </div>
-    </section>
+    </sidebar-toggle>
   `,
   styles: `
     :host {
@@ -42,11 +45,23 @@ import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 export class SidebarFormat {
   empty: Format[] = [];
   allFormats: Format[] = ['jpeg', 'png', 'webp'];
-  f = signal<Format | undefined>(undefined);
 
   format = output<Format | undefined>();
 
+  f = signal<Format | undefined>(undefined);
+  isActive = signal<boolean>(false);
+
+  constructor() {
+    effect(() => {
+      if (!this.isActive()) {
+        this.format.emit(undefined);
+        return;
+      }
+      this.format.emit(this.f());
+    });
+  }
+
   handleOnSelect(fmt: ToggleValue<Format>) {
-    this.format.emit((fmt as Format | null) ?? undefined);
+    this.f.set((fmt as Format | null) ?? undefined);
   }
 }

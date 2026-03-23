@@ -8,16 +8,16 @@ import { ToggleValue } from '@spartan-ng/brain/toggle-group';
 // Spartan
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
+import { SidebarToggle } from './sidebar-toggle';
 
 type State = 'flip' | 'mirror';
 
 @Component({
   selector: 'sidebar-flip-mirror',
-  imports: [NgIcon, HlmToggleGroupImports, HlmButtonImports],
+  imports: [NgIcon, HlmToggleGroupImports, HlmButtonImports, SidebarToggle],
   providers: [provideIcons({ lucideFlipVertical, lucideFlipHorizontal })],
   template: `
-    <section>
-      <p class="text-xs font-medium text-muted-foreground mb-2">Flip / Mirror</p>
+    <sidebar-toggle category="Flip / Mirror" [visible]="true" (isActive)="isActive.set($event)">
       <div class="flex gap-2">
         <hlm-toggle-group
           type="multiple"
@@ -36,7 +36,7 @@ type State = 'flip' | 'mirror';
           </button>
         </hlm-toggle-group>
       </div>
-    </section>
+    </sidebar-toggle>
   `,
   styles: `
     :host {
@@ -48,12 +48,25 @@ type State = 'flip' | 'mirror';
 export class SidebarFlipMirror {
   default: State[] = [];
 
-  flip = output<boolean>();
-  mirror = output<boolean>();
+  flip = output<boolean | undefined>();
+  mirror = output<boolean | undefined>();
+
+  states = signal<State[]>([]);
+  isActive = signal<boolean>(false);
+
+  constructor() {
+    effect(() => {
+      if (!this.isActive()) {
+        this.flip.emit(undefined);
+        this.mirror.emit(undefined);
+        return;
+      }
+      this.flip.emit(this.states().includes('flip'));
+      this.mirror.emit(this.states().includes('mirror'));
+    });
+  }
 
   handleOnValueChange(state: ToggleValue<State>) {
-    const states = state as State[];
-    this.flip.emit(states.includes('flip'));
-    this.mirror.emit(states.includes('mirror'));
+    this.states.set(state as State[]);
   }
 }

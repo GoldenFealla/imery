@@ -8,13 +8,16 @@ import { lucideRefreshCcw } from '@ng-icons/lucide';
 // Spartan
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSliderImports } from '@spartan-ng/helm/slider';
+
+// Component
+import { SidebarToggle } from './sidebar-toggle';
+
 @Component({
   selector: 'sidebar-rotate',
-  imports: [NgIcon, HlmButtonImports, HlmSliderImports],
+  imports: [NgIcon, HlmButtonImports, HlmSliderImports, SidebarToggle],
   providers: [provideIcons({ lucideRefreshCcw })],
   template: `
-    <section>
-      <p class="text-xs font-medium text-muted-foreground mb-2">Rotate</p>
+    <sidebar-toggle category="Rotate" [visible]="true" (isActive)="isActive.set($event)">
       <div class="flex items-center gap-3">
         <hlm-slider min="-180" max="180" [value]="angle()" (valueChange)="angle.set($event)" />
         <span class="text-sm text-muted-foreground w-10 text-right"> {{ angle() }}° </span>
@@ -22,7 +25,7 @@ import { HlmSliderImports } from '@spartan-ng/helm/slider';
           <ng-icon name="lucideRefreshCcw"></ng-icon>
         </button>
       </div>
-    </section>
+    </sidebar-toggle>
   `,
   styles: `
     :host {
@@ -33,10 +36,16 @@ import { HlmSliderImports } from '@spartan-ng/helm/slider';
 })
 export class SidebarRotate {
   angle = signal<number[]>([0]);
-  rotate = output<RotateOptions>();
+  rotate = output<RotateOptions | undefined>();
+
+  isActive = signal<boolean>(false);
 
   constructor() {
     effect(() => {
+      if (!this.isActive()) {
+        this.rotate.emit(undefined);
+        return;
+      }
       this.rotate.emit({ angle: this.angle()[0] });
     });
   }

@@ -45,7 +45,6 @@ export class SideBar {
 
   opts = signal<TransformOptions>({});
   optsChange = output<TransformOptions>();
-  // url = input<string | null>(null);
 
   save = output<void>();
   isSaving = input<boolean>(false);

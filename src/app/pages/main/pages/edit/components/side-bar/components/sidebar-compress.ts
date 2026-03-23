@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 
 // Models
 import { CompressOptions } from '@models/image';
@@ -14,9 +14,9 @@ import { SidebarToggle } from './sidebar-toggle';
   selector: 'sidebar-compress',
   imports: [HlmSliderImports, HlmCheckboxImports, SidebarToggle],
   template: `
-    <sidebar-toggle category="Compress">
+    <sidebar-toggle category="Compress" (isActive)="isActive.set($event)">
       <div class="flex items-center gap-3">
-        <hlm-slider min="1" max="100" step="1" [value]="[q()]" (valueChange)="compress.emit({ quality: $event[0] })" />
+        <hlm-slider min="1" max="100" step="1" [value]="[q()]" (valueChange)="q.set($event[0])" />
         <span class="text-sm text-muted-foreground w-10 text-right"> {{ q() }}% </span>
       </div>
     </sidebar-toggle>
@@ -31,5 +31,17 @@ import { SidebarToggle } from './sidebar-toggle';
 export class SidebarCompress {
   q = signal<number>(80);
 
-  compress = output<CompressOptions>();
+  compress = output<CompressOptions | undefined>();
+
+  isActive = signal<boolean>(false);
+
+  constructor() {
+    effect(() => {
+      if (!this.isActive()) {
+        this.compress.emit(undefined);
+        return;
+      }
+      this.compress.emit({ quality: this.q() });
+    });
+  }
 }

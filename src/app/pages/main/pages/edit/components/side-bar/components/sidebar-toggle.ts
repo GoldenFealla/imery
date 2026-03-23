@@ -12,7 +12,7 @@ import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
         <p class="text-xs font-medium text-muted-foreground">{{ category() }}</p>
         <hlm-checkbox [checked]="shown()" (checkedChange)="toggleVisible($event)" />
       </div>
-      @if (shown()) {
+      @if (shown() || visible()) {
         <ng-content></ng-content>
       }
     </section>
@@ -26,9 +26,11 @@ import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
 })
 export class SidebarToggle {
   category = input.required<string>();
-  shown = signal<boolean>(false);
+  visible = input<boolean>(false);
 
   isActive = output<boolean>();
+
+  shown = signal<boolean>(false);
 
   toggleVisible(enabled: boolean) {
     this.shown.set(enabled);

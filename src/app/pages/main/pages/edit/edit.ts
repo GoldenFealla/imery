@@ -62,7 +62,6 @@ export class Edit implements OnDestroy {
     });
 
   handleOnTransform(opts: TransformOptions) {
-    console.log(opts);
     this.transformSubject.next(opts);
   }
 
