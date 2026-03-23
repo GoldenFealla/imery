@@ -28,7 +28,7 @@ import { lucideArrowLeft, lucideLoader, lucideSave } from '@ng-icons/lucide';
 
     SidebarFilter,
     SidebarFormat,
-    // SidebarCompress,
+    SidebarCompress,
     // SidebarCrop,
     // SidebarWatermark,
   ],
