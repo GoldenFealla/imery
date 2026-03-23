@@ -32,8 +32,8 @@ export class ImageService {
     return this.apiService.postBlob(Endpoints.Transform(id), opts);
   }
 
-  public Save(id: string) {
-    return this.apiService.put(Endpoints.Save(id));
+  public Save(id: string, opts: TransformOptions) {
+    return this.apiService.put(Endpoints.Save(id), opts);
   }
 
   public Upload(file: File) {

@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 
-import { debounceTime, distinctUntilChanged, map, Subject, switchMap, tap } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map, Subject, switchMap, tap, timer } from 'rxjs';
 
 // Components
 import { SideBar } from './components/side-bar/sidebar';
@@ -28,7 +28,6 @@ export class Edit implements OnDestroy {
   private imageService = inject(ImageService);
 
   id = this.route.snapshot.paramMap.get('id')!;
-
   image = toSignal(this.imageService.Retrieve(this.id).pipe(map((res) => res.body)));
 
   // Transform state
@@ -36,12 +35,11 @@ export class Edit implements OnDestroy {
 
   previewUrl = signal<string | null>(null);
   originalUrl = computed(() => this.image()?.url ?? null);
+
   isPreviewing = signal(false);
   isSaving = signal(false);
 
   private transformSubject = new Subject<TransformOptions>();
-  private blobUrls: string[] = [];
-
   private transformSub = this.transformSubject
     .pipe(
       debounceTime(500),
@@ -53,7 +51,6 @@ export class Edit implements OnDestroy {
       next: (res) => {
         if (res.body) {
           const url = URL.createObjectURL(res.body);
-          this.blobUrls.push(url);
           this.previewUrl.set(url);
         }
         this.isPreviewing.set(false);
@@ -62,17 +59,17 @@ export class Edit implements OnDestroy {
     });
 
   handleOnTransform(opts: TransformOptions) {
+    this.opts.set(opts);
     this.transformSubject.next(opts);
   }
 
   save() {
     this.isSaving.set(true);
-    this.imageService.Save(this.id).subscribe({
-      next: () => {
+    combineLatest([this.imageService.Save(this.id, this.opts()), timer(1000)]).subscribe({
+      next: () => this.router.navigateByUrl('/galleries'),
+      complete: () => {
         this.isSaving.set(false);
-        this.router.navigateByUrl('/galleries');
       },
-      error: () => this.isSaving.set(false),
     });
   }
 
@@ -82,6 +79,5 @@ export class Edit implements OnDestroy {
 
   ngOnDestroy() {
     this.transformSub.unsubscribe();
-    this.blobUrls.forEach((url) => URL.revokeObjectURL(url));
   }
 }

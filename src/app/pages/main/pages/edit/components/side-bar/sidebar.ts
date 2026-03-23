@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, Component, effect, input, linkedSignal, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 
 // Models
-import { TransformOptions, TransformOptionsKey } from '@models/image';
+import { TransformOptions } from '@models/image';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
 // Components
+import { SidebarCrop } from './components/sidebar-crop';
 import { SidebarResize } from './components/sidebar-resize';
 import { SidebarRotate } from './components/sidebar-rotate';
 import { SidebarFilter } from './components/sidebar-filter';
 import { SidebarFormat } from './components/sidebar-format';
 import { SidebarFlipMirror } from './components/sidebar-flip-mirror';
 import { SidebarCompress } from './components/sidebar-compress';
-import { SidebarCrop } from './components/sidebar-crop';
 import { SidebarWatermark } from './components/sidebar-wartermark';
 
 // Icons
