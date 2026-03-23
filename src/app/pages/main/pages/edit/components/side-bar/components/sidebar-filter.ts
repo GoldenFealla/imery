@@ -1,25 +1,25 @@
-import { ChangeDetectionStrategy, Component, input, model, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output, signal } from '@angular/core';
+
+// Models
 import { Filter } from '@models/image';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { ToggleValue } from '@spartan-ng/brain/toggle-group';
+
+// Spartan
+import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 
 @Component({
   selector: 'sidebar-filter',
-  imports: [HlmButtonImports],
+  imports: [HlmToggleGroupImports],
   template: `
     <section>
       <p class="text-xs font-medium text-muted-foreground mb-2">Filters</p>
-      <div class="flex gap-2">
-        @for (filter of allFilters; track filter) {
-          <button
-            hlmBtn
-            [variant]="filters()?.includes(filter) ? 'default' : 'outline'"
-            size="sm"
-            (click)="toggle(filter)"
-          >
-            {{ filter }}
+      <hlm-toggle-group type="multiple" variant="outline" spacing="2" size="sm" [nullable]="true" (valueChange)="handleOnChnageFilters($event)">
+        @for (f of filters; track f) {
+          <button class="data-[state=on]:bg-primary data-[state=on]:text-background" hlmToggleGroupItem [value]="f">
+            {{ f }}
           </button>
         }
-      </div>
+      </hlm-toggle-group>
     </section>
   `,
   styles: `
@@ -30,14 +30,11 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarFilter {
-  allFilters: Filter[] = ['grayscale', 'sepia'];
-  filters = model<Filter[]>();
+  filters: Filter[] = ['grayscale', 'sepia'];
 
-  toggle(filter: Filter) {
-    let fils = this.filters();
-    if (fils) {
-      const next = fils.includes(filter) ? fils.filter((f) => f !== filter) : [...fils, filter];
-      this.filters.set(next);
-    }
+  filter = output<Filter[]>();
+
+  handleOnChnageFilters(value: ToggleValue<Filter>) {
+    this.filter.emit(value as Filter[]);
   }
 }

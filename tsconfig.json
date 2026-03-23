@@ -35,7 +35,9 @@
       "@spartan-ng/helm/spinner": ["./libs/ui/spinner/src/index.ts"],
       "@spartan-ng/helm/slider": ["./libs/ui/slider/src/index.ts"],
       "@spartan-ng/helm/checkbox": ["./libs/ui/checkbox/src/index.ts"],
-      "@spartan-ng/helm/badge": ["./libs/ui/badge/src/index.ts"]
+      "@spartan-ng/helm/badge": ["./libs/ui/badge/src/index.ts"],
+      "@spartan-ng/helm/toggle-group": ["./libs/ui/toggle-group/src/index.ts"],
+      "@spartan-ng/helm/toggle": ["./libs/ui/toggle/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
