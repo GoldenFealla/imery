@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Models
 import { ResizeOptions } from '@models/image';
@@ -58,14 +60,15 @@ export class SidebarResize {
 
   isActive = signal<boolean>(false);
 
+  private watcher = computed<ResizeOptions | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return { height: this.height(), width: this.width(), keep_aspect: this.keep_aspect() };
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.resize.emit(undefined);
-        return;
-      }
-      this.resize.emit({ height: this.height(), width: this.width(), keep_aspect: this.keep_aspect() });
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.resize.emit(v));
   }
 
   private get aspectRatio(): number {

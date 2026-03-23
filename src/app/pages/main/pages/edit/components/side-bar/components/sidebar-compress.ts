@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Models
 import { CompressOptions } from '@models/image';
@@ -35,13 +37,14 @@ export class SidebarCompress {
 
   isActive = signal<boolean>(false);
 
+  private watcher = computed<CompressOptions | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return { quality: this.q() };
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.compress.emit(undefined);
-        return;
-      }
-      this.compress.emit({ quality: this.q() });
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.compress.emit(v));
   }
 }

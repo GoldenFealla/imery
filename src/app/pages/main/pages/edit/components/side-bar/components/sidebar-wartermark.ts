@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, model, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Models
 import { WatermarkOptions } from '@models/image';
@@ -14,7 +16,7 @@ import { SidebarToggle } from './sidebar-toggle';
   selector: 'sidebar-watermark',
   imports: [HlmLabelImports, HlmInputImports, HlmSliderImports, HlmCheckboxImports, SidebarToggle],
   template: `
-    <sidebar-toggle category="Watermark">
+    <sidebar-toggle category="Watermark" (isActive)="isActive.set($event)">
       <div class="space-y-4">
         <input hlmInput type="text" placeholder="Watermark text" [value]="text()" (input)="handleOnChangeText($event)" />
         <div class="space-y-1">
@@ -60,24 +62,24 @@ export class SidebarWatermark {
   x = signal<number>(20);
   y = signal<number>(20);
 
-  watermark = output<WatermarkOptions | undefined>();
-
   isActive = signal<boolean>(false);
 
+  watermark = output<WatermarkOptions | undefined>();
+  private watcher = computed<WatermarkOptions | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return {
+      text: this.text(),
+      size: this.size(),
+      opacity: this.opacity(),
+      x: this.x(),
+      y: this.y(),
+    };
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.watermark.emit(undefined);
-        return;
-      }
-      this.watermark.emit({
-        text: this.text(),
-        size: this.size(),
-        opacity: this.opacity(),
-        x: this.x(),
-        y: this.y(),
-      });
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.watermark.emit(v));
   }
 
   handleOnChangeText(event: Event) {
@@ -90,7 +92,7 @@ export class SidebarWatermark {
   }
 
   handleOnChangeOpacity(value: number[]) {
-    this.size.set(value[0]);
+    this.opacity.set(value[0]);
   }
 
   handleOnChangeX(event: Event) {

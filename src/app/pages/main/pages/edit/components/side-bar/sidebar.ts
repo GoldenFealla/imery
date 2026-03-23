@@ -17,13 +17,18 @@ import { SidebarWatermark } from './components/sidebar-wartermark';
 // Icons
 import { lucideArrowLeft, lucideLoader, lucideSave } from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmSeparatorImports } from '@spartan-ng/helm/separator';
+import { HlmScrollAreaImports } from '@spartan-ng/helm/scroll-area';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @Component({
   selector: 'edit-sidebar',
   imports: [
     NgIcon,
     HlmButtonImports,
-
+    HlmSeparatorImports,
+    HlmScrollAreaImports,
+    NgScrollbarModule,
     // SidebarCrop,
     SidebarResize,
     SidebarRotate,

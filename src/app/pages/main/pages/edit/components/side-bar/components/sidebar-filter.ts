@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Models
 import { Filter } from '@models/image';
@@ -39,14 +41,15 @@ export class SidebarFilter {
   isActive = signal<boolean>(false);
   filtersState = signal<Filter[]>([]);
 
+  private watcher = computed<Filter[] | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return this.filtersState();
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.filter.emit(undefined);
-        return;
-      }
-      this.filter.emit(this.filtersState());
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.filter.emit(v));
   }
 
   handleOnChangeFilters(value: ToggleValue<Filter>) {

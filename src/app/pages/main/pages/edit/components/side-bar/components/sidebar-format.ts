@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Models
 import { Format } from '@models/image';
@@ -9,7 +11,6 @@ import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
 
 // Components
 import { SidebarToggle } from './sidebar-toggle';
-import { SidebarCompress } from './sidebar-compress';
 
 @Component({
   selector: 'sidebar-format',
@@ -51,14 +52,15 @@ export class SidebarFormat {
   f = signal<Format | undefined>(undefined);
   isActive = signal<boolean>(false);
 
+  private watcher = computed<Format | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return this.f();
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.format.emit(undefined);
-        return;
-      }
-      this.format.emit(this.f());
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.format.emit(v));
   }
 
   handleOnSelect(fmt: ToggleValue<Format>) {

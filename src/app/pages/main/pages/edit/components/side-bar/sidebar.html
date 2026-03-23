@@ -1,4 +1,4 @@
-<div class="w-80 border-r border-border flex flex-col overflow-hidden">
+<div class="h-full w-80 border-l border-r border-border flex flex-col overflow-hidden">
   <div class="p-4 border-b border-border flex items-center gap-3">
     <button hlmBtn variant="ghost" size="icon" (click)="back.emit()">
       <ng-icon name="lucideArrowLeft" size="18" />
@@ -6,25 +6,51 @@
     <span class="font-medium text-sm truncate">{{ id() }}</span>
   </div>
 
-  <div class="flex-1 overflow-y-auto p-4 space-y-6">
-    <!-- <sidebar-crop
-      [url]="url()"
-      [crop]="crop()"
-      [imageWidth]="imageWidth()"
-      [imageHeight]="imageHeight()"
-      (cropChange)="onCropCommit($event)"
-      (cropClear)="crop.set(undefined)"
-    /> -->
-    <sidebar-resize (resize)="handleOnChange('resize', $event)" />
-    <sidebar-rotate (rotate)="handleOnChange('rotate', $event)" />
-    <sidebar-flip-mirror (flip)="handleOnChange('flip', $event)" (mirror)="handleOnChange('mirror', $event)" />
-
-    <sidebar-filter (filter)="handleOnChange('filters', $event)" />
-    <sidebar-format (format)="handleOnChange('format', $event)" />
-    <sidebar-compress (compress)="handleOnChange('compress', $event)" /> 
-    <sidebar-watermark (watermark)="handleOnChange('watermark', $event)" />
+  <div class="p-4">
+    <section class="">
+      <div class="flex items-center justify-between mb-2">
+        <p class="text-sm font-semibold">Type</p>
+        <p class="text-sm font-semibold">Active</p>
+      </div>
+    </section>
   </div>
-  <div class="p-4 border-t border-border" >
+
+  <ng-scrollbar hlm class="flex-1 overflow-y-auto" appearance="compact">
+    <div class="p-4 space-y-4">
+      <!-- <sidebar-crop
+        [url]="url()"
+        [crop]="crop()"
+        [imageWidth]="imageWidth()"
+        [imageHeight]="imageHeight()"
+        (cropChange)="onCropCommit($event)"
+        (cropClear)="crop.set(undefined)"
+      /> -->
+      <sidebar-resize (resize)="handleOnChange('resize', $event)" />
+      <hlm-separator></hlm-separator>
+
+      <sidebar-rotate (rotate)="handleOnChange('rotate', $event)" />
+      <hlm-separator></hlm-separator>
+
+      <sidebar-flip-mirror (flip)="handleOnChange('flip', $event)" (mirror)="handleOnChange('mirror', $event)" />
+      <hlm-separator></hlm-separator>
+
+      <sidebar-filter (filter)="handleOnChange('filters', $event)" />
+      <hlm-separator></hlm-separator>
+
+      <sidebar-format (format)="handleOnChange('format', $event)" />
+      <hlm-separator></hlm-separator>
+
+      <sidebar-compress (compress)="handleOnChange('compress', $event)" /> 
+      <hlm-separator></hlm-separator>
+
+      <sidebar-watermark (watermark)="handleOnChange('watermark', $event)" />
+      <hlm-separator></hlm-separator>
+    </div>
+  </ng-scrollbar>
+  
+  <div class="p-4" >
+    <div class="w-full text-center text-xs text-muted-foreground">Not implemented dirty mechanic yet</div>
+    <div class="w-full text-center text-xs text-muted-foreground mb-1">Don't spam the save</div>
     <button hlmBtn class="w-full" (click)="save.emit()" [disabled]="isSaving()">
       @if (isSaving()) {
         <ng-icon name="lucideLoader" size="16" class="animate-spin" />

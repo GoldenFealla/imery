@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component, signal, output, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, output, effect, computed } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
+
+// Models
 import { RotateOptions } from '@models/image';
 
 // Icons
@@ -40,14 +44,15 @@ export class SidebarRotate {
 
   isActive = signal<boolean>(false);
 
+  private watcher = computed<RotateOptions | undefined>(() => {
+    if (!this.isActive()) return undefined;
+    return { angle: this.angle()[0] };
+  });
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.rotate.emit(undefined);
-        return;
-      }
-      this.rotate.emit({ angle: this.angle()[0] });
-    });
+    toObservable(this.watcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.rotate.emit(v));
   }
 
   reset() {

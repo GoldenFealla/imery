@@ -38,7 +38,8 @@
       "@spartan-ng/helm/badge": ["./libs/ui/badge/src/index.ts"],
       "@spartan-ng/helm/toggle-group": ["./libs/ui/toggle-group/src/index.ts"],
       "@spartan-ng/helm/toggle": ["./libs/ui/toggle/src/index.ts"],
-      "@spartan-ng/helm/skeleton": ["./libs/ui/skeleton/src/index.ts"]
+      "@spartan-ng/helm/skeleton": ["./libs/ui/skeleton/src/index.ts"],
+      "@spartan-ng/helm/scroll-area": ["./libs/ui/scroll-area/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

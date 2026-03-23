@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component, effect, input, model, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, output, signal } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs';
 
 // Icons
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -8,6 +10,8 @@ import { ToggleValue } from '@spartan-ng/brain/toggle-group';
 // Spartan
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
+
+// Component
 import { SidebarToggle } from './sidebar-toggle';
 
 type State = 'flip' | 'mirror';
@@ -54,16 +58,17 @@ export class SidebarFlipMirror {
   states = signal<State[]>([]);
   isActive = signal<boolean>(false);
 
+  private flipWatcher = computed(() => (this.isActive() ? this.states().includes('flip') : undefined));
+
+  private mirrorWatcher = computed(() => (this.isActive() ? this.states().includes('mirror') : undefined));
+
   constructor() {
-    effect(() => {
-      if (!this.isActive()) {
-        this.flip.emit(undefined);
-        this.mirror.emit(undefined);
-        return;
-      }
-      this.flip.emit(this.states().includes('flip'));
-      this.mirror.emit(this.states().includes('mirror'));
-    });
+    toObservable(this.flipWatcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.flip.emit(v));
+    toObservable(this.mirrorWatcher)
+      .pipe(skip(1))
+      .subscribe((v) => this.mirror.emit(v));
   }
 
   handleOnValueChange(state: ToggleValue<State>) {
