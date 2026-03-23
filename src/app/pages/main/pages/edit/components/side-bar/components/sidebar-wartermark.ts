@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, model, output, signal } from '@angular/core';
 
 // Models
 import { WatermarkOptions } from '@models/image';
@@ -8,79 +8,43 @@ import { HlmLabelImports } from '@spartan-ng/helm/label';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmSliderImports } from '@spartan-ng/helm/slider';
 import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
+import { SidebarToggle } from './sidebar-toggle';
 
 @Component({
   selector: 'sidebar-watermark',
-  imports: [HlmLabelImports, HlmInputImports, HlmSliderImports, HlmCheckboxImports],
+  imports: [HlmLabelImports, HlmInputImports, HlmSliderImports, HlmCheckboxImports, SidebarToggle],
   template: `
-    <section class="space-y-3">
-      <div class="flex items-center justify-between">
-        <label hlmLabel class="text-xs font-medium">Watermark</label>
-        <hlm-checkbox [checked]="!!watermark()" (checkedChange)="toggle($event)" />
-      </div>
-
-      @if (watermark(); as w) {
-        <input
-          hlmInput
-          type="text"
-          placeholder="Watermark text"
-          [value]="w.text"
-          (input)="patch('text', $any($event.target).value)"
-          class="w-full"
-        />
-
+    <sidebar-toggle category="Watermark">
+      <div class="space-y-4">
+        <input hlmInput type="text" placeholder="Watermark text" [value]="text()" (input)="handleOnChangeText($event)" />
         <div class="space-y-1">
           <div class="flex items-center justify-between">
             <label hlmLabel class="text-xs">Size</label>
-            <span class="text-xs text-muted-foreground">{{ w.size }}px</span>
+            <span class="text-xs text-muted-foreground">{{ size() }}px</span>
           </div>
-          <hlm-slider
-            min="10"
-            max="120"
-            step="1"
-            [value]="[w.size]"
-            (valueChange)="patch('size', $event[0])"
-          />
+          <hlm-slider min="10" max="120" step="1" [value]="[size()]" (valueChange)="handleOnChangeSize($event)" />
         </div>
 
         <div class="space-y-1">
           <div class="flex items-center justify-between">
             <label hlmLabel class="text-xs">Opacity</label>
-            <span class="text-xs text-muted-foreground"> {{ (w.opacity * 100).toFixed(0) }}% </span>
+            <span class="text-xs text-muted-foreground"> {{ (opacity() * 100).toFixed(0) }}% </span>
           </div>
-          <hlm-slider
-            min="0"
-            max="1"
-            step="0.05"
-            [value]="[w.opacity]"
-            (valueChange)="patch('size', $event[0])"
-          />
+          <hlm-slider min="0" max="1" step="0.05" [value]="[opacity()]" (valueChange)="handleOnChangeOpacity($event)" />
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           <div class="space-y-1">
             <label hlmLabel class="text-xs">X</label>
-            <input
-              hlmInput
-              type="number"
-              [value]="w.x"
-              (input)="patch('x', +$any($event.target).value)"
-              class="w-full"
-            />
+            <input hlmInput type="number" [value]="x()" class="w-full" (input)="handleOnChangeX($event)" />
           </div>
           <div class="space-y-1">
             <label hlmLabel class="text-xs">Y</label>
-            <input
-              hlmInput
-              type="number"
-              [value]="w.y"
-              (input)="patch('y', +$any($event.target).value)"
-              class="w-full"
-            />
+            <input hlmInput type="number" [value]="y()" class="w-full" (input)="handleOnChangeY($event)" />
           </div>
         </div>
-      }
-    </section>
+      </div>
+    </sidebar-toggle>
   `,
   styles: `
     :host {
@@ -90,16 +54,46 @@ import { HlmCheckboxImports } from '@spartan-ng/helm/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarWatermark {
-  watermark = input<WatermarkOptions | undefined>(undefined);
-  watermarkChange = output<WatermarkOptions | undefined>();
+  text = signal<string>('watermark');
+  size = signal<number>(16);
+  opacity = signal<number>(0.75);
+  x = signal<number>(20);
+  y = signal<number>(20);
 
-  toggle(enabled: boolean) {
-    this.watermarkChange.emit(
-      enabled ? { text: '', size: 48, opacity: 0.5, x: 20, y: 20 } : undefined,
-    );
+  watermark = output<WatermarkOptions | undefined>();
+
+  constructor() {
+    effect(() => {
+      this.watermark.emit({
+        text: this.text(),
+        size: this.size(),
+        opacity: this.opacity(),
+        x: this.x(),
+        y: this.y(),
+      });
+    });
   }
 
-  patch<K extends keyof WatermarkOptions>(field: K, value: WatermarkOptions[K]) {
-    this.watermarkChange.emit({ ...this.watermark()!, [field]: value });
+  handleOnChangeText(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.text.set(value);
+  }
+
+  handleOnChangeSize(value: number[]) {
+    this.size.set(value[0]);
+  }
+
+  handleOnChangeOpacity(value: number[]) {
+    this.size.set(value[0]);
+  }
+
+  handleOnChangeX(event: Event) {
+    const value = (event.target as HTMLInputElement).valueAsNumber;
+    this.x.set(value);
+  }
+
+  handleOnChangeY(event: Event) {
+    const value = (event.target as HTMLInputElement).valueAsNumber;
+    this.y.set(value);
   }
 }

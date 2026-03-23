@@ -22,6 +22,7 @@ import { lucideArrowLeft, lucideLoader, lucideSave } from '@ng-icons/lucide';
   imports: [
     NgIcon,
 
+    // SidebarCrop,
     SidebarResize,
     SidebarRotate,
     SidebarFlipMirror,
@@ -29,8 +30,7 @@ import { lucideArrowLeft, lucideLoader, lucideSave } from '@ng-icons/lucide';
     SidebarFilter,
     SidebarFormat,
     SidebarCompress,
-    // SidebarCrop,
-    // SidebarWatermark,
+    SidebarWatermark,
   ],
   providers: [provideIcons({ lucideArrowLeft, lucideLoader, lucideSave })],
   templateUrl: './sidebar.html',
