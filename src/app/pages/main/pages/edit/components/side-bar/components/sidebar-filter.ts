@@ -13,7 +13,7 @@ import { HlmToggleGroupImports } from '@spartan-ng/helm/toggle-group';
   template: `
     <section>
       <p class="text-xs font-medium text-muted-foreground mb-2">Filters</p>
-      <hlm-toggle-group type="multiple" variant="outline" spacing="2" size="sm" [nullable]="true" (valueChange)="handleOnChnageFilters($event)">
+      <hlm-toggle-group type="multiple" variant="outline" spacing="2" size="sm" [nullable]="true" (valueChange)="handleOnChangeFilters($event)">
         @for (f of filters; track f) {
           <button class="data-[state=on]:bg-primary data-[state=on]:text-background" hlmToggleGroupItem [value]="f">
             {{ f }}
@@ -34,7 +34,7 @@ export class SidebarFilter {
 
   filter = output<Filter[]>();
 
-  handleOnChnageFilters(value: ToggleValue<Filter>) {
+  handleOnChangeFilters(value: ToggleValue<Filter>) {
     this.filter.emit(value as Filter[]);
   }
 }
