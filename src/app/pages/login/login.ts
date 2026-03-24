@@ -1,8 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, finalize, lastValueFrom } from 'rxjs';
+import { finalize } from 'rxjs';
 
 // Models
 import { LoginForm } from '@models/auth';
@@ -17,15 +16,11 @@ import { HlmFieldImports } from '@spartan-ng/helm/field';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 
+// shared
+import { minDelayResult } from '@shared/rxjs/min-delay.operator';
+
 @Component({
-  imports: [
-    ReactiveFormsModule,
-    HlmCardImports,
-    HlmFieldImports,
-    HlmInputImports,
-    HlmInputGroupImports,
-    HlmButtonImports,
-  ],
+  imports: [ReactiveFormsModule, HlmCardImports, HlmFieldImports, HlmInputImports, HlmInputGroupImports, HlmButtonImports],
   templateUrl: './login.html',
   styleUrl: './login.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,17 +59,15 @@ export class Login {
     this.authService
       .Login(this.form.value as LoginForm)
       .pipe(
-        catchError((e: HttpErrorResponse) => {
-          console.log(e.error);
-          this.error = e.error ?? 'Invalid email or password';
-          return EMPTY;
-        }),
-        finalize(() => {
-          this.isLoading.set(false);
-        }),
+        minDelayResult(500),
+        finalize(() => this.isLoading.set(false)),
       )
-      .subscribe(() => {
-        console.log('logged in');
+      .subscribe((res) => {
+        if (!res.success) {
+          this.error = res.error ?? 'Invalid email or password';
+          return;
+        }
+
         this.router.navigate(['/']);
       });
   }

@@ -1,10 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 
+// Models
 import { Auth, AuthState, LoginForm } from '@models/auth';
+
+// Services
 import { ApiBackendService } from '@services/api';
+
+// Environment
 import { environment } from '@environments/environment.development';
+import { mapToResponse } from '@shared/rxjs/map-to-response.operator';
 
 const Endpoints = {
   Check: `${environment.apiUrl}/auth/check`,
@@ -52,9 +59,17 @@ export class AuthService {
   }
 
   public Login(form: LoginForm) {
-    return this.apiService
-      .post<{ access_token: string }>(Endpoints.Login, form)
-      .pipe(tap((res) => (this.accessToken = res.body?.access_token ?? null)));
+    return this.apiService.post<{ access_token: string }>(Endpoints.Login, form).pipe(
+      mapToResponse(),
+      tap((res) => {
+        if (res.success) {
+          this.accessToken = res.data?.access_token ?? null;
+          this.authState.set(Auth.Authenticated);
+        } else {
+          this.authState.set(Auth.Unauthenticated);
+        }
+      }),
+    );
   }
 
   public Logout() {
