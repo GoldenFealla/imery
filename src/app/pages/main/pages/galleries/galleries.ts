@@ -39,9 +39,7 @@ export class Galleries {
 
   onEdit(id: string) {
     console.log(`Edit: ${id} called`);
-    this.router.navigateByUrl(`/edit/${id}`).then((result) => {
-      console.log('navigation result:', result); // true = success, false = blocked, null = cancelled
-    });
+    this.router.navigateByUrl(`/edit/${id}`);
   }
 
   onDelete(id: string) {
