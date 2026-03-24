@@ -1,8 +1,10 @@
 export type Image = {
   id: string;
+  name: string;
   url: string;
   version: number;
   owner_id: string;
+  updated_at: string;
 };
 
 export type Format = 'jpeg' | 'png' | 'webp';
