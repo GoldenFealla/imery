@@ -1,9 +1,35 @@
+@let imgs = images();
+
+@if (imgs.length > 0) {
+  <div class="flex flex-row justify-end p-4">
+    <button hlmBtn variant="default" size="lg" (click)="onUpload()">
+      <ng-icon name="lucidePlus" />Upload
+    </button>
+  </div>
+}
 <div class="grid grid-cols-2 gap-4 p-4 sm:grid-cols-3 md:grid-cols-4">
-  @for (image of images(); track image.id) {
+  @for (img of imgs; track img.id) {
     <galleries-image-card
-      [image]="image"
+      [image]="img"
       (edit)="onEdit($event)"
       (delete)="onDelete($event)"
     />
+  } @empty { 
+    <div hlmEmpty class="col-span-full">
+			<div hlmEmptyHeader>
+				<div hlmEmptyMedia variant="icon">
+					<ng-icon name="lucideImage" />
+				</div>
+				<div hlmEmptyTitle>No Images Yet</div>
+				<div hlmEmptyDescription>
+					You haven&apos;t uploaded any images yet. Get started by uploading your first image.
+				</div>
+			</div>
+			<div hlmEmptyContent>
+        <button hlmBtn variant="default" size="lg" (click)="onUpload()">
+          <ng-icon name="lucidePlus" />Upload
+        </button>
+			</div>
+		</div>
   }
 </div>

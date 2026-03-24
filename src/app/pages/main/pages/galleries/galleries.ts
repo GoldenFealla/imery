@@ -9,9 +9,18 @@ import { ImageCard } from './components/image-card/image-card';
 // Services
 import { ImageService } from '@services/image';
 
+// Spartan
+import { HlmEmptyImports } from '@spartan-ng/helm/empty';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+
+// Icon
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideImage, lucidePlus } from '@ng-icons/lucide';
+
 @Component({
   selector: 'app-galleries',
-  imports: [ImageCard],
+  imports: [NgIcon, ImageCard, HlmButtonImports, HlmEmptyImports],
+  providers: [provideIcons({ lucideImage, lucidePlus })],
   templateUrl: './galleries.html',
   styleUrl: './galleries.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +32,10 @@ export class Galleries {
   images = toSignal(this.imageService.GetGalleries().pipe(map((res) => res.body ?? [])), {
     initialValue: [],
   });
+
+  onUpload() {
+    this.router.navigateByUrl('/upload');
+  }
 
   onEdit(id: string) {
     console.log(`Edit: ${id} called`);
