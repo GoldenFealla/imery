@@ -72,6 +72,10 @@ export class AuthService {
     );
   }
 
+  public LoginWithGoogle() {
+    window.location.href = 'http://localhost:8081/auth/google';
+  }
+
   public Logout() {
     return this.apiService.post(Endpoints.Logout).pipe(
       tap(() => {

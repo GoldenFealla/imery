@@ -45,7 +45,7 @@
             {{ isLoading() ? 'Logging in...' : 'Login' }}
           </button>
           <div class="w-full flex flex-row justify-center gap-2">
-            <button hlmBtn size="icon" variant="secondary"> 
+            <button hlmBtn size="icon" variant="secondary" (click)="loginWithGoogle()"> 
               <ng-icon name="googleIcon"></ng-icon>
             </button>
             <button hlmBtn size="icon" variant="secondary"> 

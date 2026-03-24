@@ -81,5 +81,7 @@ export class Login {
       });
   }
 
-  loginWithGoogle() {}
+  loginWithGoogle() {
+    this.authService.LoginWithGoogle();
+  }
 }
