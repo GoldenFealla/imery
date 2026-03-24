@@ -15,12 +15,25 @@
         <ng-icon hlm size="sm" [name]="isDark() ? 'lucideMoon' : 'lucideSun'" />
       </button>
       <hlm-separator orientation="vertical" class="h-5 mx-1" />
-      <a routerLink="/profile" hlmBtn variant="ghost" size="sm" class="gap-2">
+      <button hlmBtn [hlmMenubarTrigger]="profile" variant="ghost" size="sm" class="gap-2">
         <hlm-avatar class="size-7">
           <span hlmAvatarFallback>JD</span>
         </hlm-avatar>
         <span>johndoe</span>
-      </a>
+      </button>
+      <ng-template #profile>
+        <hlm-dropdown-menu>
+          <button hlmDropdownMenuItem> New Tab </button>
+          <button hlmDropdownMenuItem>New Window</button>
+          <hlm-dropdown-menu-separator />
+          <button hlmDropdownMenuItem variant="destructive" (click)="logout()">
+            Logout
+            <hlm-dropdown-menu-shortcut>
+              <ng-icon hlm size="sm" name="lucideLogOut" />
+            </hlm-dropdown-menu-shortcut>
+          </button>
+        </hlm-dropdown-menu>
+      </ng-template>
     </div>
   </div>
 </header>

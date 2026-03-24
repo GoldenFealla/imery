@@ -57,13 +57,12 @@ export class AuthService {
       .pipe(tap((res) => (this.accessToken = res.body?.access_token ?? null)));
   }
 
-  public Logout(): Observable<void> {
-    this.accessToken = null;
-    this.authState.set(Auth.Unauthenticated);
-
+  public Logout() {
     return this.apiService.post(Endpoints.Logout).pipe(
-      catchError(() => of(null)),
-      map(() => void 0),
+      tap(() => {
+        this.accessToken = null;
+        this.authState.set(Auth.Unauthenticated);
+      }),
     );
   }
 }
