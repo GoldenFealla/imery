@@ -19,13 +19,25 @@ import { HlmInputGroupImports } from '@spartan-ng/helm/input-group';
 // shared
 import { minDelayResult } from '@shared/rxjs/min-delay.operator';
 
+// Icons
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import googleIcon from '@iconify/icons-logos/google-icon';
+import githubIcon from '@iconify/icons-logos/github-icon';
+
+// Shared
+import { iconifyToNgIcons } from '@shared/icon/iconify';
+
 @Component({
-  imports: [ReactiveFormsModule, HlmCardImports, HlmFieldImports, HlmInputImports, HlmInputGroupImports, HlmButtonImports],
+  viewProviders: [provideIcons({ ...iconifyToNgIcons({ googleIcon, githubIcon }) })],
+  imports: [NgIcon, ReactiveFormsModule, HlmCardImports, HlmFieldImports, HlmInputImports, HlmInputGroupImports, HlmButtonImports],
   templateUrl: './login.html',
   styleUrl: './login.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
   private readonly _fb = inject(FormBuilder);
 
   public form = this._fb.group({
@@ -35,9 +47,6 @@ export class Login {
 
   public isLoading = signal<boolean>(false);
   public error: string | null = null;
-
-  private authService = inject(AuthService);
-  private router = inject(Router);
 
   ngOnInit() {
     let token = this.authService.Token();
@@ -71,4 +80,6 @@ export class Login {
         this.router.navigate(['/']);
       });
   }
+
+  loginWithGoogle() {}
 }

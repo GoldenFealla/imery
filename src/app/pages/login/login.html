@@ -40,9 +40,19 @@
       </div>
 
       <hlm-card-footer>
-        <button hlmBtn type="submit" form="login-form" class="w-full" [disabled]="isLoading()">
-          {{ isLoading() ? 'Logging in...' : 'Login' }}
-        </button>
+        <div class="w-full flex flex-col gap-3">
+          <button hlmBtn type="submit" form="login-form" class="w-full" [disabled]="isLoading()">
+            {{ isLoading() ? 'Logging in...' : 'Login' }}
+          </button>
+          <div class="w-full flex flex-row justify-center gap-2">
+            <button hlmBtn size="icon" variant="secondary"> 
+              <ng-icon name="googleIcon"></ng-icon>
+            </button>
+            <button hlmBtn size="icon" variant="secondary"> 
+              <ng-icon name="githubIcon"></ng-icon>
+            </button>
+          </div>
+        </div>
       </hlm-card-footer>
 
     </hlm-card>
