@@ -3,7 +3,10 @@
     <button hlmBtn variant="ghost" size="icon" (click)="back.emit()">
       <ng-icon name="lucideArrowLeft" size="18" />
     </button>
-    <span class="font-medium text-sm truncate">{{ id() }}</span>
+    <div class="flex flex-col">
+      <span class="font-semibold text-sm truncate">{{ name() }}</span>
+      <span class="text-xs text-muted-foreground truncate">{{ id() }}</span>
+    </div>
   </div>
 
   <div class="p-4">

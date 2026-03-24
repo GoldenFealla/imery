@@ -46,13 +46,15 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
 })
 export class SideBar {
   id = input.required<string>();
-  back = output<void>();
+  name = input<string>();
 
   opts = signal<TransformOptions>({});
   optsChange = output<TransformOptions>();
 
-  save = output<void>();
   isSaving = input<boolean>(false);
+  save = output<void>();
+
+  back = output<void>();
 
   handleOnChange<K extends keyof TransformOptions>(key: K, value: TransformOptions[K]) {
     this.opts.update((v) => ({ ...v, [key]: value }));
