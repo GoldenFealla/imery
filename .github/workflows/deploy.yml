@@ -51,10 +51,5 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             docker pull ghcr.io/goldenfealla/imery:latest
-            docker stop imery || true
-            docker rm imery || true
-            docker run -d \
-              --name imery \
-              --restart unless-stopped \
-              -p 3000:80 \
-              ghcr.io/goldenfealla/imery:latest
+            cd ~/services/reverse-proxy
+            docker compose up -d --force-recreate imery
