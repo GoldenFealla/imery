@@ -84,4 +84,8 @@ export class Login {
   loginWithGoogle() {
     this.authService.LoginWithGoogle();
   }
+
+  loginWithGithub() {
+    this.authService.LoginWithGithub();
+  }
 }

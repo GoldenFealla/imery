@@ -1,7 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
-
 import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
+import { jwtDecode } from 'jwt-decode';
 
 // Models
 import { Auth, AuthState, LoginForm } from '@models/auth';
@@ -12,6 +11,7 @@ import { ApiBackendService } from '@services/api';
 // Environment
 import { environment } from '@environments/environment.development';
 import { mapToResponse } from '@shared/rxjs/map-to-response.operator';
+import { UserPayload } from '@models/user_payload';
 
 const Endpoints = {
   Check: `${environment.apiUrl}/auth/check`,
@@ -32,6 +32,13 @@ export class AuthService {
 
   public state = this.authState.asReadonly();
   public isLoggedIn = computed(() => this.authState() === Auth.Authenticated);
+
+  public Payload(): UserPayload | null {
+    if (this.accessToken) {
+      return jwtDecode<UserPayload>(this.accessToken);
+    }
+    return null;
+  }
 
   public Token() {
     return this.accessToken;
@@ -74,6 +81,10 @@ export class AuthService {
 
   public LoginWithGoogle() {
     window.location.href = 'http://localhost:8081/auth/google';
+  }
+
+  public LoginWithGithub() {
+    window.location.href = 'http://localhost:8081/auth/github';
   }
 
   public Logout() {

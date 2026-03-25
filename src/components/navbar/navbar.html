@@ -16,10 +16,11 @@
       </button>
       <hlm-separator orientation="vertical" class="h-5 mx-1" />
       <button hlmBtn [hlmMenubarTrigger]="profile" variant="ghost" size="sm" class="gap-2">
-        <hlm-avatar class="size-7">
-          <span hlmAvatarFallback>JD</span>
+        <hlm-avatar class="size-7" >
+          <img hlmAvatarImage [src]="userPayload?.picture">
+          <span hlmAvatarFallback>IP</span>
         </hlm-avatar>
-        <span>johndoe</span>
+        <span>{{userPayload?.name}}</span>
       </button>
       <ng-template #profile>
         <hlm-dropdown-menu>

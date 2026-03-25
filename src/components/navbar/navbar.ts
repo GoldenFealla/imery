@@ -41,6 +41,8 @@ export class Navbar {
   private theme = inject(ThemeService);
   private authService = inject(AuthService);
 
+  userPayload = this.authService.Payload();
+
   isDark = this.theme.isDark;
 
   toggleTheme() {
