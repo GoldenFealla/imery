@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ApiService } from '@services/api';
 
-import { environment } from '@environments/environment.development';
+import { environment } from '@environments/environment';
 
 // Models
 import { Image, TransformOptions } from '@models/image';

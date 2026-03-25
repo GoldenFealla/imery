@@ -9,7 +9,7 @@ import { Auth, AuthState, LoginForm } from '@models/auth';
 import { ApiBackendService } from '@services/api';
 
 // Environment
-import { environment } from '@environments/environment.development';
+import { environment } from '@environments/environment';
 import { mapToResponse } from '@shared/rxjs/map-to-response.operator';
 import { UserPayload } from '@models/user_payload';
 
@@ -80,11 +80,11 @@ export class AuthService {
   }
 
   public LoginWithGoogle() {
-    window.location.href = 'http://localhost:8081/auth/google';
+    window.location.href = `${environment.apiUrl}/auth/google`;
   }
 
   public LoginWithGithub() {
-    window.location.href = 'http://localhost:8081/auth/github';
+    window.location.href = `${environment.apiUrl}/auth/github`;
   }
 
   public Logout() {
