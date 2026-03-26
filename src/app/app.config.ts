@@ -10,10 +10,14 @@ import { authInterceptor } from '../interceptors/auth-interceptor';
 
 // Services
 import { AuthService } from '@services/auth';
+import { ThemeService } from '@services/theme';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAppInitializer(() => {
+      const themeService = inject(ThemeService);
+      themeService.init();
+
       const authService = inject(AuthService);
       return firstValueFrom(authService.Refresh());
     }),

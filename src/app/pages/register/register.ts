@@ -5,6 +5,7 @@ import { finalize } from 'rxjs';
 
 // Models
 import { RegisterForm } from '@models/auth';
+import { ThemeService } from '@services/theme';
 
 // Services
 import { AuthService } from '@services/auth';
@@ -22,6 +23,7 @@ import { minDelayResult } from '@shared/rxjs/min-delay.operator';
 
 // Icons
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMoon, lucideSun } from '@ng-icons/lucide';
 import googleIcon from '@iconify/icons-logos/google-icon';
 import githubIcon from '@iconify/icons-logos/github-icon';
 
@@ -29,7 +31,7 @@ import githubIcon from '@iconify/icons-logos/github-icon';
 import { iconifyToNgIcons } from '@shared/icon/iconify';
 
 @Component({
-  viewProviders: [provideIcons({ ...iconifyToNgIcons({ googleIcon, githubIcon }) })],
+  viewProviders: [provideIcons({ lucideMoon, lucideSun, ...iconifyToNgIcons({ googleIcon, githubIcon }) })],
   imports: [
     NgIcon,
     RouterLink,
@@ -49,6 +51,13 @@ import { iconifyToNgIcons } from '@shared/icon/iconify';
 export class Register {
   private authService = inject(AuthService);
   private router = inject(Router);
+
+  private theme = inject(ThemeService);
+  isDark = this.theme.isDark;
+
+  toggleTheme() {
+    this.theme.toggle();
+  }
 
   private readonly _fb = inject(FormBuilder);
 

@@ -6,8 +6,7 @@ import { Injectable, signal } from '@angular/core';
 export class ThemeService {
   isDark = signal(localStorage.getItem('theme') === 'dark');
 
-  constructor() {
-    // Apply saved theme on startup
+  init() {
     document.documentElement.classList.toggle('dark', this.isDark());
   }
 
