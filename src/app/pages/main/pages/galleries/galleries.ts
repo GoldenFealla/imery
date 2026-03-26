@@ -1,13 +1,15 @@
-import { ChangeDetectionStrategy, Component, inject, Signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, tap } from 'rxjs';
+import { map } from 'rxjs';
 
 // Components
 import { ImageCard } from './components/image-card/image-card';
 
 // Services
 import { ImageService } from '@services/image';
+
+// Models
+import { Image } from '@models/image';
 
 // Spartan
 import { HlmEmptyImports } from '@spartan-ng/helm/empty';
@@ -29,9 +31,18 @@ export class Galleries {
   private imageService = inject(ImageService);
   private router = inject(Router);
 
-  images = toSignal(this.imageService.GetGalleries().pipe(map((res) => res.body ?? [])), {
-    initialValue: [],
-  });
+  images = signal<Image[] | null>(null);
+
+  ngOnInit() {
+    this.galleries();
+  }
+
+  galleries() {
+    return this.imageService
+      .GetGalleries()
+      .pipe(map((res) => res.data))
+      .subscribe((data) => this.images.set(data));
+  }
 
   onUpload() {
     this.router.navigateByUrl('/upload');
@@ -43,7 +54,6 @@ export class Galleries {
   }
 
   onDelete(id: string) {
-    console.log(`Delete: ${id} called`);
-    // call delete service
+    this.imageService.Delete(id).subscribe(() => this.galleries());
   }
 }

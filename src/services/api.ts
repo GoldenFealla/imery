@@ -49,4 +49,8 @@ export class ApiService {
   put<T>(url: string, body: unknown = {}) {
     return this.client.put<T>(url, body, this.options);
   }
+
+  delete<T>(url: string) {
+    return this.client.delete<T>(url, this.options);
+  }
 }

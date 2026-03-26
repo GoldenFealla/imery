@@ -21,7 +21,7 @@
       <button hlmBtn variant="secondary" size="icon-lg" (click)="edit.emit(image().id)" >
         <ng-icon name="lucidePencil" size="16" />
       </button>
-      <button hlmBtn variant="ghost" size="icon-lg" class="text-destructive hover:text-destructive" (click)="delete.emit(image().id)" >
+      <button hlmBtn variant="ghost" size="icon-lg" class="text-destructive hover:text-destructive" (click)="deleteAlert.open()" >
         <ng-icon name="lucideTrash2" size="16" />
       </button>
     </div>
@@ -32,3 +32,16 @@
     </span>
   </div>
 </div>
+
+<hlm-alert-dialog #deleteAlert>
+  <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx" class="text-foreground min-w-xl lg:min-w-lg">
+    <hlm-alert-dialog-header>
+      <h2 hlmAlertDialogTitle>Delete this image?</h2>
+      <p hlmAlertDialogDescription> This action cannot be undone </p>
+    </hlm-alert-dialog-header>
+    <hlm-alert-dialog-footer>
+      <button hlmAlertDialogCancel (click)="ctx.close()">Cancel</button>
+      <button hlmAlertDialogAction variant="destructive" (click)="delete.emit(image().id); ctx.close()">Delete</button>
+    </hlm-alert-dialog-footer>
+  </hlm-alert-dialog-content>
+</hlm-alert-dialog>

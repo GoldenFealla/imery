@@ -5,6 +5,7 @@ import { environment } from '@environments/environment';
 
 // Models
 import { Image, TransformOptions } from '@models/image';
+import { mapToResponse } from '@shared/rxjs/map-to-response.operator';
 
 const Endpoints = {
   Upload: `${environment.apiUrl}/images/`,
@@ -12,6 +13,7 @@ const Endpoints = {
   Retrieve: (id: string) => `${environment.apiUrl}/images/${id}`,
   Transform: (id: string) => `${environment.apiUrl}/images/${id}/transform`,
   Save: (id: string) => `${environment.apiUrl}/images/${id}/save`,
+  Delete: (id: string) => `${environment.apiUrl}/images/${id}`,
 } as const;
 
 @Injectable({
@@ -21,7 +23,7 @@ export class ImageService {
   private apiService = inject(ApiService);
 
   public GetGalleries() {
-    return this.apiService.get<Image[]>(Endpoints.Galleries);
+    return this.apiService.get<Image[]>(Endpoints.Galleries).pipe(mapToResponse());
   }
 
   public Retrieve(id: string) {
@@ -40,5 +42,9 @@ export class ImageService {
     const form = new FormData();
     form.append('image', file, file.name);
     return this.apiService.postForm<Image>(Endpoints.Upload, form);
+  }
+
+  public Delete(id: string) {
+    return this.apiService.delete<void>(Endpoints.Delete(id));
   }
 }

@@ -11,10 +11,11 @@ import { lucidePencil, lucideTrash2 } from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSkeletonImports } from '@spartan-ng/helm/skeleton';
 import { HlmBadgeImports } from '@spartan-ng/helm/badge';
+import { HlmAlertDialogImports } from '@spartan-ng/helm/alert-dialog';
 
 @Component({
   selector: 'galleries-image-card',
-  imports: [NgIcon, HlmButtonImports, HlmSkeletonImports, HlmBadgeImports],
+  imports: [NgIcon, HlmAlertDialogImports, HlmButtonImports, HlmSkeletonImports, HlmBadgeImports],
   providers: [provideIcons({ lucidePencil, lucideTrash2 })],
   templateUrl: './image-card.html',
   styleUrl: './image-card.css',
