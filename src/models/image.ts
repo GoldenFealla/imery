@@ -8,7 +8,9 @@ export type Image = {
 };
 
 export type Format = 'jpeg' | 'png' | 'webp';
-export type Filter = 'grayscale' | 'sepia';
+
+export const Filters = ['grayscale', 'sepia', 'vivid', 'dystopian', 'film', 'wild', 'noir'] as const;
+export type FilterType = (typeof Filters)[number];
 
 export type ResizeOptions = {
   width: number;
@@ -39,6 +41,11 @@ export type RotateOptions = {
   angle: number;
 };
 
+export type FilterOptions = {
+  name: FilterType;
+  intensity: number;
+};
+
 export type TransformOptions = {
   resize?: ResizeOptions;
   crop?: CropOptions;
@@ -48,7 +55,7 @@ export type TransformOptions = {
   flip?: boolean;
   mirror?: boolean;
   format?: Format;
-  filters?: Filter[];
+  filters?: FilterOptions[];
 };
 
 export type TransformOptionsKey = keyof TransformOptions;
