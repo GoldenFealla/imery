@@ -3,7 +3,7 @@ import { catchError, map, Observable, of, shareReplay, tap } from 'rxjs';
 import { jwtDecode } from 'jwt-decode';
 
 // Models
-import { Auth, AuthState, LoginForm } from '@models/auth';
+import { Auth, AuthState, LoginForm, RegisterForm } from '@models/auth';
 
 // Services
 import { ApiBackendService } from '@services/api';
@@ -17,6 +17,7 @@ const Endpoints = {
   Check: `${environment.apiUrl}/auth/check`,
   Refresh: `${environment.apiUrl}/auth/refresh`,
   Login: `${environment.apiUrl}/auth/login`,
+  Register: `${environment.apiUrl}/auth/register`,
   Logout: `${environment.apiUrl}/auth/logout`,
 } as const;
 
@@ -67,6 +68,20 @@ export class AuthService {
 
   public Login(form: LoginForm) {
     return this.apiService.post<{ access_token: string }>(Endpoints.Login, form).pipe(
+      mapToResponse(),
+      tap((res) => {
+        if (res.success) {
+          this.accessToken = res.data?.access_token ?? null;
+          this.authState.set(Auth.Authenticated);
+        } else {
+          this.authState.set(Auth.Unauthenticated);
+        }
+      }),
+    );
+  }
+
+  public Register(form: RegisterForm) {
+    return this.apiService.post<{ access_token: string }>(Endpoints.Register, form).pipe(
       mapToResponse(),
       tap((res) => {
         if (res.success) {

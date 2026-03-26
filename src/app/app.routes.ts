@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { Main } from '@pages/main/main';
 import { Login } from '@pages/login/login';
+import { Register } from '@pages/register/register';
 
 // Main children
 import { Upload } from '@pages/main/pages/upload/upload';
@@ -27,6 +28,7 @@ export const routes: Routes = [
       { path: 'edit', redirectTo: '/galleries' },
     ],
   },
+  { path: 'register', component: Register, canActivate: [guestGuard] },
   { path: 'login', component: Login, canActivate: [guestGuard] },
   { path: '**', component: NotFound },
 ];

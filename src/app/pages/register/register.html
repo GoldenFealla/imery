@@ -2,12 +2,22 @@
   <div class="min-w-72 max-w-96 w-full p-2">
     <hlm-card>
       <hlm-card-header>
-        <h3 hlmCardTitle>Login</h3>
-        <p hlmCardDescription>Enter your credentials to continue</p>
+        <h3 hlmCardTitle>Register</h3>
+        <p hlmCardDescription>Create a new account</p>
       </hlm-card-header>
       <div hlmCardContent>
-        <form id="login-form" [formGroup]="form" (ngSubmit)="submit()">
+        <form id="register-form" [formGroup]="form" (ngSubmit)="submit()">
           <div class="flex flex-col gap-4">
+            <!-- Name -->
+            <div hlmField>
+              <label hlmFieldLabel for="name">Name</label>
+              <input hlmInput id="name" type="text" 
+                     placeholder="John Doe"
+                     formControlName="name" />
+              @if (form.controls.name.invalid && form.controls.name.touched) {
+                 <hlm-field-error>Name must be at least 6 characters</hlm-field-error>
+              }
+            </div>
             <!-- Email -->
             <div hlmField>
               <label hlmFieldLabel for="email">Email</label>
@@ -37,12 +47,12 @@
       </div>
       <hlm-card-footer>
         <div class="w-full flex flex-col gap-2">
-          <button hlmBtn type="submit" form="login-form" class="w-full" [disabled]="isLoading()">
-            {{ isLoading() ? 'Logging in...' : 'Login' }}
+          <button hlmBtn type="submit" form="register-form" class="w-full" [disabled]="isLoading()">
+            {{ isLoading() ? 'Registering...' : 'Register' }}
           </button>
           <div class="w-full flex flex-row items-center justify-center text-muted-foreground">
-            <span> Don't have account? </span>
-            <a hlmBtn variant="link" class="p-0 pl-1 text-blue-400" [routerLink]="['/register']">Create one</a>
+            <span> Already have account? </span>
+            <a hlmBtn variant="link" class="p-0 pl-1 text-blue-400" [routerLink]="['/login']">Login</a>
           </div>
           <div class="w-full flex flex-row items-center gap-3">
             <hlm-separator class="flex-1" />

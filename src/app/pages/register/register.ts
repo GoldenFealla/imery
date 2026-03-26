@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 // Models
-import { LoginForm } from '@models/auth';
+import { RegisterForm } from '@models/auth';
 
 // Services
 import { AuthService } from '@services/auth';
@@ -42,17 +42,18 @@ import { iconifyToNgIcons } from '@shared/icon/iconify';
     HlmButtonImports,
     HlmSeparatorImports,
   ],
-  templateUrl: './login.html',
-  styleUrl: './login.css',
+  templateUrl: './register.html',
+  styleUrl: './register.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Login {
+export class Register {
   private authService = inject(AuthService);
   private router = inject(Router);
 
   private readonly _fb = inject(FormBuilder);
 
   public form = this._fb.group({
+    name: ['', [Validators.required, Validators.minLength(6)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
@@ -69,6 +70,7 @@ export class Login {
   }
 
   submit() {
+    console.log(this.form.value);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -78,7 +80,7 @@ export class Login {
     this.error = null;
 
     this.authService
-      .Login(this.form.value as LoginForm)
+      .Register(this.form.value as RegisterForm)
       .pipe(
         minDelayResult(500),
         finalize(() => this.isLoading.set(false)),
