@@ -22,9 +22,20 @@ import { SidebarToggle } from './sidebar-toggle';
   providers: [provideIcons({ lucideRefreshCcw })],
   template: `
     <sidebar-toggle category="Rotate" [visible]="true" (isActive)="isActive.set($event)">
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1">
         <hlm-slider min="-180" max="180" [value]="angle()" (valueChange)="angle.set($event)" />
-        <span class="text-sm text-muted-foreground w-10 text-right"> {{ angle() }}° </span>
+        <div class="inline-flex items-center gap-0.5">
+          <input
+            hlmInput
+            type="number"
+            min="-180"
+            max="180"
+            class="w-7 text-sm text-muted-foreground text-right angle-input invalid:text-red-500"
+            [value]="angle()[0]"
+            (change)="handleOnChangeAngle($event)"
+          />
+          <span class="text-sm text-muted-foreground">°</span>
+        </div>
         <button hlmBtn size="icon" variant="ghost" (click)="reset()">
           <ng-icon name="lucideRefreshCcw"></ng-icon>
         </button>
@@ -34,6 +45,12 @@ import { SidebarToggle } from './sidebar-toggle';
   styles: `
     :host {
       display: block;
+    }
+
+    .angle-input::-webkit-outer-spin-button,
+    .angle-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,6 +70,11 @@ export class SidebarRotate {
     toObservable(this.watcher)
       .pipe(skip(1))
       .subscribe((v) => this.rotate.emit(v));
+  }
+
+  handleOnChangeAngle(event: Event) {
+    const value = (event.target as HTMLInputElement).valueAsNumber;
+    this.angle.set([value]);
   }
 
   reset() {
